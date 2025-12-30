@@ -17,6 +17,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <cctype>
 
 /**
  * @namespace data_structures
@@ -37,10 +38,14 @@ namespace linked_list {
  * @returns true if there are only digits present in the string
  * @returns false if any other character is found
  */
-bool isDigit(const std::string& s) {
+bool is_digit(const std::string& s) {
     // function statements here
-    for (char i : s) {
-        if (!isdigit(i)) {
+    if (s.empty()) 
+    {
+        return false;
+    }
+    for (unsigned char c : s) {
+        if (!std::isdigit(c)) {
             return false;
         }
     }
@@ -231,7 +236,12 @@ int main() {
         std::cout << "\n4. Print";
         std::cout << "\n0. Exit";
         std::cout << "\n\nEnter you choice : ";
-        std::cin >> choice;
+        while (!(std::cin>>choice)) 
+        {
+        std::cout << "Invalid input! Please enter a number.\n";
+        std::cin.clear();              // clear error state
+        std::cin.ignore(1000, '\n');   // discard bad input
+        }
         switch (choice) {
             case 0:
                 std::cout << "\nQuitting the program...\n";
@@ -239,35 +249,39 @@ int main() {
             case 1:
                 std::cout << "\nEnter the element to be inserted : ";
                 std::cin >> s;
-
-                if (data_structures::linked_list::isDigit(s)) {
-                    x = std::stoi(s);
-                    l.push_back(x);
-                } else {
-                    std::cout << "Wrong Input!\n";
-                }
+               while (!data_structures::linked_list::is_digit(s)) 
+               {
+                    std::cout << "Invalid input! Please enter a number.\n";
+                    std::cin >> s;
+               }
+                x = std::stoi(s);
+                l.push_back(x);
                 break;
             case 2:
                 std::cout << "\nEnter the element to be removed : ";
                 std::cin >> s;
-                if (data_structures::linked_list::isDigit(s)) {
-                    x = std::stoi(s);
-                    l.erase(x);
-                } else {
-                    std::cout << "Wrong Input!\n";
-                }
+               while (!data_structures::linked_list::is_digit(s)) 
+               {
+                    std::cout << "Invalid input! Please enter a number.\n";
+                    std::cin >> s;
+               }
+                x = std::stoi(s);
+                l.erase(x);
                 break;
-            case 3:
+            case 3:{
                 std::cout << "\nEnter the element to be searched : ";
                 std::cin >> s;
-                if (data_structures::linked_list::isDigit(s)) {
-                    x = std::stoi(s);
-                    std::shared_ptr<data_structures::linked_list::link> found =
-                        l.search(x);
-                } else {
-                    std::cout << "Wrong Input!\n";
-                }
+               while (!data_structures::linked_list::is_digit(s)) 
+               {
+                    std::cout << "Invalid input! Please enter a number.\n";
+                    std::cin >> s;
+               }
+
+                x = std::stoi(s);
+                std::shared_ptr<data_structures::linked_list::link> found =
+                    l.search(x);
                 break;
+                }
             case 4:
                 l.display();
                 std::cout << "\n";
@@ -275,7 +289,7 @@ int main() {
             default:
                 std::cout << "Invalid Input\n" << std::endl;
                 break;
-        }
-    } while (choice != 0);
+        }}while (choice != 0);
+     
     return 0;
 }
